@@ -1,5 +1,6 @@
 import { Server, Socket } from "socket.io";
 import { Chat } from "../models/chat.model";
+import chatController from "../controllers/chat.controller";
 
 const setupChatSocket = (io: Server) => {
   io.on("connection", (socket: Socket) => {
@@ -31,7 +32,7 @@ const setupChatSocket = (io: Server) => {
     });
 
     // Joining a room
-    socket.on("join room", (data) => {
+    socket.on("join room", async (data) => {
       socket.join(data.room);
       console.log(`${data.username} joined the room ${data.room}`);
       io.to(data.room).emit("newMessage", {
@@ -39,12 +40,10 @@ const setupChatSocket = (io: Server) => {
         username: "System",
         room: data.room,
       });
-      // io.emit("newMessage", {
-      //   text: "hello world",
-      // });
-      console.log(data.message);
-      socket.emit("newMessage", { message: data.message });
-      // io.to(data.room).emit("newMessage", {});
+
+      const message = await Chat.find({ room: data.room });
+      console.log(message);
+      io.emit("previousMessages", { message });
     });
 
     // Leaving a room

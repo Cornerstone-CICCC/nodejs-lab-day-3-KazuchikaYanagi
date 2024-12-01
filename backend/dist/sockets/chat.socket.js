@@ -35,7 +35,7 @@ const setupChatSocket = (io) => {
             console.log(`User disconnected: ${socket.id}`);
         });
         // Joining a room
-        socket.on("join room", (data) => {
+        socket.on("join room", (data) => __awaiter(void 0, void 0, void 0, function* () {
             socket.join(data.room);
             console.log(`${data.username} joined the room ${data.room}`);
             io.to(data.room).emit("newMessage", {
@@ -43,13 +43,19 @@ const setupChatSocket = (io) => {
                 username: "System",
                 room: data.room,
             });
-            // io.emit("newMessage", {
-            //   text: "hello world",
+            // io.to(data.room).emit("newMessage", {
+            //   message: Chat.find(),
+            //   username: data.username,
+            //   room: data.room,
             // });
-            console.log(data.message);
-            socket.emit("newMessage", { message: data.message });
-            // io.to(data.room).emit("newMessage", {});
-        });
+            // console.log(Chat.find({ room: data.room }));
+            const message = yield chat_model_1.Chat.find({ room: data.room });
+            console.log(message);
+            io.emit("previousMessages", { message });
+            // console.log(data.message);
+            // socket.emit("newMessage", { message: data.message });
+            // io.to(data.room).emit("newMessage", chatController.getMessagesByRoom);
+        }));
         // Leaving a room
         socket.on("leave room", (data) => {
             socket.leave(data.room);

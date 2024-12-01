@@ -22,10 +22,11 @@ const getAllChats = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 const getMessagesByRoom = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log(req.body);
+        // console.log(req.body);
         // const { room } = req.body;
         // const id = Number(room.split(" ")[1]);
-        const chatByRoom = yield chat_model_1.Chat.find({ room: req.body.room });
+        const chatByRoom = yield chat_model_1.Chat.find({ room: "Room 1" }).exec();
+        // const chatByRoom = await Chat.find();
         res.status(200).json(chatByRoom);
     }
     catch (err) {

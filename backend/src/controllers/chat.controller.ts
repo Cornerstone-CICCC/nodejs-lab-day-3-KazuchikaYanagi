@@ -13,10 +13,11 @@ const getAllChats = async (req: Request, res: Response) => {
 
 const getMessagesByRoom = async (req: Request, res: Response) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     // const { room } = req.body;
     // const id = Number(room.split(" ")[1]);
-    const chatByRoom = await Chat.find({ room: req.body.room });
+    const chatByRoom = await Chat.find({ room: "Room 1" }).exec();
+    // const chatByRoom = await Chat.find();
     res.status(200).json(chatByRoom);
   } catch (err) {
     res.status(500).json({ error: `Error fetching chats: ${err}` });

@@ -48,7 +48,7 @@
 
       // Handle room buttons
       roomButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
+        btn.addEventListener("click", async () => {
           messages.innerHTML = "";
           const newRoom = btn.getAttribute("data-room");
           const username = usernameInput.value.trim() || "Anonymous";
@@ -84,12 +84,26 @@
 
       // Listen for any messages from the server
       socket.on("newMessage", (data) => {
+        console.log(data);
         if (data.room === currentRoom || !data.room) {
           const li = document.createElement("li");
           li.innerHTML = `<strong>${data.username}:</strong> ${data.message}`;
           messages.appendChild(li);
         }
         // const messages = document.querySelector(".messages");
+      });
+
+      // Listen for any messages from the server
+      socket.on("previousMessages", (data) => {
+        // console.log("previousMessagesのlog");
+        // console.log(data.message[0]);
+        for (let i = 0; i < data.message.length; i++) {
+          // console.log(data.message[i]);
+
+          const li = document.createElement("li");
+          li.innerHTML = `<strong>${data.message[i].username}:</strong> ${data.message[i].message}`;
+          messages.appendChild(li);
+        }
       });
     </script>
   </body>
